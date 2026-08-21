@@ -86,11 +86,12 @@ export function PenguinPong({ mode, difficulty, started, paused, sound, onStart,
   const touchDown = (code: string, event: PointerEvent<HTMLButtonElement>) => { event.preventDefault(); event.currentTarget.setPointerCapture(event.pointerId); keys.current.add(code); };
   const touchUp = (code: string, event: PointerEvent<HTMLButtonElement>) => { event.preventDefault(); keys.current.delete(code); if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId); };
   const touchButton = (code: string, label: string, icon: string) => <button type="button" aria-label={label} onPointerDown={event => touchDown(code, event)} onPointerUp={event => touchUp(code, event)} onPointerCancel={event => touchUp(code, event)} onLostPointerCapture={() => keys.current.delete(code)} onContextMenu={event => event.preventDefault()}>{icon}</button>;
-  return <div className="canvas-wrap"><canvas ref={canvas} width={W} height={H} />
+  return <><div className="canvas-wrap"><canvas ref={canvas} width={W} height={H} />
     <div className="scorebar"><div><span>PLAYER 1</span><b>{scores[0]}</b></div><i>❄</i><div><b>{scores[1]}</b><span>{mode === "ai" ? "PENGUIN AI" : "PLAYER 2"}</span></div></div>
     {!started && <div className="game-overlay"><div className="mini-fish">❯</div><h2>READY TO SLIDE?</h2><p>{mode === "ai" ? `Player 1: W / S · ${difficulty.toUpperCase()} AI` : "P1: W / S  ·  P2: ↑ / ↓"}</p><button className="play-button" onClick={onStart}>PLAY <span>▶</span></button></div>}
     {paused && started && !winner && <div className="game-overlay compact"><h2>PAUSED</h2><p>Press Space or the play button to continue.</p></div>}
     {winner && <div className="game-overlay"><div className="trophy">❄</div><h2>{winner}</h2><p>Final score {scores[0]} — {scores[1]}</p><button className="play-button" onClick={() => { reset(); onStart(); }}>PLAY AGAIN <span>↻</span></button></div>}
+  </div>
     {started && !paused && !winner && <div className="touch-controls" aria-label="Touch controls"><div className="touch-control-group touch-control-left" aria-label="Player 1 controls">{touchButton("KeyW", "Player 1 up", "▲")}{touchButton("KeyS", "Player 1 down", "▼")}</div>{mode === "local" && <div className="touch-control-group touch-control-right" aria-label="Player 2 controls">{touchButton("ArrowUp", "Player 2 up", "▲")}{touchButton("ArrowDown", "Player 2 down", "▼")}</div>}</div>}
-  </div>;
+  </>;
 }
